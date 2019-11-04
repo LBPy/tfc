@@ -1,0 +1,19 @@
+---
+title: "Tests for Cauchy-distribution"
+author: "Lucas Butsch"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tfc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This is the vignette for my package tfc.

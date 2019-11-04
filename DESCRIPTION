@@ -1,0 +1,26 @@
+Package: tfc
+Type: Package
+Title: Tests for Cauchy-distribution
+Version: 0.0.0.9000
+Authors@R: person("Lucas","Butsch",email = "lucas.butsch@gmail.com", role = c("aut", "cre"))
+Description: This package consist of multiple functions. 
+    There are three functions for estimating the parameters of the Cauchy-Distribution and
+    multiple new and common test for cauchy. As well is data included for the critical values obtained by a 
+    Monte-Carlo simmulation with 100k reps.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    snow,
+    MonteCarlo,
+    stabledist,
+    parallel,
+    rmutil,
+    actuar,
+    stats
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
