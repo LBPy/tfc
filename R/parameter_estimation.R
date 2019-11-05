@@ -19,7 +19,7 @@ ml_est <- function(x) {
   f <- function(a) {
     -n*log(a[2])+sum(log(a[2]**2+(x-a[1])**2))
   }
-  optim(est_param(x),f,lower = c(-Inf,1e-10),upper = c(Inf,Inf),method = "L-BFGS-B")$par
+  optim(median_est(x),f,lower = c(-Inf,1e-10),upper = c(Inf,Inf),method = "L-BFGS-B")$par
 }
 
 #' @describeIn median_est Paremter estimation with an estimated squared integrated error.
@@ -32,5 +32,5 @@ eise_est <- function(x,l) {
     b=z[2]
     (2/n**2 * sum(l*b**2/(l**2*b**2+(t(matrix(rep(x,n), nrow = n, ncol = n))-x)**2)) - 4/n*sum((1+l)*b**2/((1+l)**2*b**2+(x-a)**2)))
   }
-  optim(c(est_param(x)),f,l=1,lower = c(-Inf,1e-10),upper = c(Inf,Inf),method = "L-BFGS-B")$par
+  optim(c(median_est(x)),f,l=1,lower = c(-Inf,1e-10),upper = c(Inf,Inf),method = "L-BFGS-B")$par
 }

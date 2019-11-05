@@ -7,13 +7,13 @@
 #' @param y a numeric vector of data values.
 #' @param l a positive number.
 #'
-#' @example D(rcauchy(20),0.025)
+#' @examples D_Henze(c(1,2,3,4),0.025)
 #'
 #' @return A number.
 #'
 #' @family teststatistic
 #' @export
-D <- function(y,l) {
+D_Henze <- function(y,l) {
   n = length(y)
   2/n*sum(l/(l**2+(t(matrix(rep(y,n), nrow = n, ncol = n))-y)**2))-4*sum((1+l)/((1+l)**2+y**2)) + 2*n/(2+l)
 }

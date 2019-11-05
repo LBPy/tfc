@@ -9,7 +9,7 @@ standardisiert(x, method_estimation = 1)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{l}{A Parameter.}
+\item{method_estimation}{A Parameter.}
 }
 \value{
 A numeric vector.
@@ -20,8 +20,8 @@ A numeric vector.
 \details{
 This function standardizes the Inputvector. This is done with a parameter estimation function like \code{\link{median_est}}.
 For  \enumerate{
-             \item \eqn{l=1} \code{\link{median_est}} is used,
-             \item \eqn{l=2} \code{\link{ml_est}} is used,
-             \item \eqn{l=3} \code{\link{eise_est}} is used.
+             \item \eqn{method_estimation=1} \code{\link{median_est}} is used,
+             \item \eqn{method_estimation=2} \code{\link{ml_est}} is used,
+             \item \eqn{method_estimation=3} \code{\link{eise_est}} is used.
 }
 }

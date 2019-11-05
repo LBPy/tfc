@@ -54,6 +54,106 @@ hello <- function() {
 #' @format A data frame with 4 rows and 7 columns.
 "quantile_D_ML"
 
+#' Quantile of the T1 statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T1_Median"
+
+#' Quantile of the T1 statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T1_ML"
+
+#' Quantile of the T2 statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T2_Median"
+
+#' Quantile of the T2 statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T2_ML"
+
+#' Quantile of the T3 statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T3_Median"
+
+#' Quantile of the T3 statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T3_ML"
+
+#' Quantile of the T4 statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T4_Median"
+
+#' Quantile of the T4 statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T4_ML"
+
+#' Quantile of the T5 statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T5_Median"
+
+#' Quantile of the T5 statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 7 columns.
+"quantile_T5_ML"
+
+#' Quantile of the KL statistic with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 1 columns.
+"quantile_KL_Median"
+
+#' Quantile of the KL statistic with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#'
+#' @format A data frame with 4 rows and 1 columns.
+"quantile_KL_ML"
+
+#' Quantile of the edf statistics with Median parameter estimation.
+#'
+#' A dataset contatining the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#' Each row is for one of the classic test (KS, CM, AD,W) and the row is for the datasize (10,20,50,100,200)
+#'
+#' @format A data frame with 4 rows and 1 columns.
+"quantile_edf_Median"
+
+#' Quantile of the edf statistics with ML parameter estimation.
+#'
+#' A dataset containing the 0.95 quantile of the D statistic gained by a 100k rep Monte-Carlo simulation.
+#' Each row is for one of the classic test (KS, CM, AD,W) and the row is for the datasize (10,20,50,100,200)
+#'
+#' @format A data frame with 5 rows and 3 columns.
+"quantile_edf_ML"
+
 #' tfc: A package for testing for Cauchy-distribution
 #'
 #' The tfc package provides multiple test and 3 ways to estimate paramteres of a Cauchy-Distribution.

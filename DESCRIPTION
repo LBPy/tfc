@@ -7,7 +7,7 @@ Description: This package consist of multiple functions.
     There are three functions for estimating the parameters of the Cauchy-Distribution and
     multiple new and common test for cauchy. As well is data included for the critical values obtained by a 
     Monte-Carlo simmulation with 100k reps.
-License: What license is it under?
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports: 

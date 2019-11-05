@@ -50,6 +50,6 @@ This function computes the value of the T Test with weighth parameter l. For T5 
 }}
 
 \seealso{
-Other teststatistic: \code{\link{D}}
+Other teststatistic: \code{\link{D_Henze}}
 }
 \concept{teststatistic}

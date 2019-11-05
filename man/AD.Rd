@@ -2,10 +2,13 @@
 % Please edit documentation in R/tests.R
 \name{AD}
 \alias{AD}
-\title{Anderson Darling}
+\title{Anderson-Darling Test}
 \usage{
 AD(y)
 }
+\arguments{
+\item{y}{a numeric vector of data values.}
+}
 \description{
-Anderson Darling
+Perform the Anderson-Darling test.
 }

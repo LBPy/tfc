@@ -18,9 +18,9 @@ quantile_D_Parallel <- function(reps = 10000,statistic=D,standard = 2,cores) {
   #A = matrix(data=do.call(rbind,mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
   f <- function(y){
     emp <- apply(replicate(reps,rcauchy(y,0,1)),2,standardisiert,method_estimation = standard)
-    do.call(cbind,mclapply(a, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
+    do.call(cbind, parallel::mclapply(a, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
   }
-  A <- matrix(data=do.call(rbind,mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
+  A <- matrix(data=do.call(rbind, parallel::mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
   colnames(A) <- a
   rownames(A)<- b
   A
@@ -31,9 +31,9 @@ quantile_T5 <- function(reps = 10000,standard = 2,cores) {#1.0 darf nicht als Pa
   #A = matrix(data=do.call(rbind,mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
   f <- function(y){
     emp <- apply(replicate(reps,rcauchy(y,0,1)),2,standardisiert,method_estimation = standard)
-    do.call(cbind,mclapply(a, function(x) unname(quantile(apply(emp,2,T5,l=x),0.95)),mc.cores=cores))
+    do.call(cbind,parallel::mclapply(a, function(x) unname(quantile(apply(emp,2,T5,l=x),0.95)),mc.cores=cores))
   }
-  A <- matrix(data=do.call(rbind,mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
+  A <- matrix(data=do.call(rbind, parallel::mclapply(b,f,mc.cores =cores)),nrow=length(b),ncol = length(a))
   colnames(A) <- a
   rownames(A)<- b
   A
@@ -43,20 +43,14 @@ quantile_Schaubild_Param <- function(reps = 10000,statistic=D,standard = 2,cores
   b = 20
   f <- function(y){
     emp <- apply(replicate(reps,rcauchy(y,0,1)),2,standardisiert,method_estimation = standard)
-    do.call(cbind,mclapply(a, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
+    do.call(cbind,parallel::mclapply(a, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
   }
   A <- matrix(data=f(b),nrow=length(b),ncol=length(a))
   colnames(A) <- a
   rownames(A)<- b
   A
 }
-RepParallel <- function(n, expr, simplify = "array",...) {
-  answer <-
-    mclapply(integer(n), eval.parent(substitute(function(...) expr)),...)
-  if (!identical(simplify, FALSE) && length(answer))
-    return(simplify2array(answer, higher = (simplify == "array")))
-  else return(answer)
-}
+
 quantile_edf <- function(reps=10000,standard = 2) {
   A = matrix(data=NA,nrow=5,ncol = 4)
   for (n in c(10,20,50,100,200)) {

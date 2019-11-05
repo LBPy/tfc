@@ -11,7 +11,7 @@ testentscheid(n, Verteilung = "", method, x = 0)
 
 \item{Verteilung}{A String specifing the choosen distribution to test.}
 
-\item{method}{A name of a test \code{\link{teststatistic}}}
+\item{method}{A name of a test.}
 
 \item{x}{A numeric vector of length n.}
 }

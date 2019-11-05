@@ -6,6 +6,11 @@
 \usage{
 distr(n, case)
 }
+\arguments{
+\item{n}{The size of the dataset (10,20 or 50).}
+
+\item{case}{A name of a distribution.}
+}
 \description{
 distr returns a random vector simulated by a choosen distribution.
 }
