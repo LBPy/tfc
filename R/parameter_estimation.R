@@ -7,13 +7,11 @@
 #' @param x A Numeric vector.
 #'
 #' @return the location and the scale parameter.
-#' @export
 median_est <- function(x) {
   c(median(x),IQR(x)/2)
 }
 
 #' @describeIn median_est Parameter estimation with the ML Method
-#' @export
 ml_est <- function(x) {
   n=length(x)
   f <- function(a) {
@@ -24,7 +22,6 @@ ml_est <- function(x) {
 
 #' @describeIn median_est Paremter estimation with an estimated squared integrated error.
 #' @param l Parameter for the weight function described in \code{\link{D}}
-#' @export
 eise_est <- function(x,l) {
   n=length(x)
   f <- function(z,l) {

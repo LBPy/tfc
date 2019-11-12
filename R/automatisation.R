@@ -240,3 +240,36 @@ testentscheid <- function(n,Verteilung ="",method,x=0){
   return(list("Decision" = d))
 
 }
+
+
+cauchy.test <- function(Test , Sample){
+  n = length(Sample)
+  if (n!=10 || n!= 20 || n!= 50){
+     return("Error, wrong sample size.")
+  }
+
+  if(Verteilung != ""){
+    x = distr(n,Verteilung)
+  }
+
+
+
+  d<-"Error"
+  if(method == "D_Henze")         {d <- D_Henze(standardisiert(x,1),5) > tfc::quantile_D_Median[a,6]}
+
+  if(method == "KL")    {d <- D_2(standardisiert(x,2)) >tfc::quantile_KL_ML[a]}
+
+
+  if(method == "W")      {d <- W(standardisiert(x,2)) > tfc::quantile_edf_ML[a,4]}
+  if(method == "AD") {d <- AD(standardisiert(x,1)) > tfc::quantile_edf_Median[a,3]}
+  if(method == "CM") {d <- CM(standardisiert(x,1)) > tfc::quantile_edf_Median[a,2]}
+  if(method == "KS") {d <- KS(standardisiert(x,1)) > tfc::quantile_edf_Median[a,1]}
+
+
+  if(method == "T2")     {d <- T2(standardisiert(x,2),0.025) >tfc::quantile_T2_ML[a,1]}
+  if(method == "T1")     {d <-T1(standardisiert(x,2),5) > tfc::quantile_T1_ML[a,6]}
+  if(method == "T3")         {d <-T3(standardisiert(x,2),10) > tfc::quantile_T3_ML[a,7]}
+  if(method == "T4")         {d <-T4(standardisiert(x,2),10) > tfc::quantile_T4_ML[a,7]}
+  return(list("Decision" = d))
+
+}
