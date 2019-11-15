@@ -241,35 +241,49 @@ testentscheid <- function(n,Verteilung ="",method,x=0){
 
 }
 
-
+#' @export
 cauchy.test <- function(Test , Sample){
   n = length(Sample)
-  if (n!=10 || n!= 20 || n!= 50){
+  if (n!=10 & n!= 20 & n!= 50){
      return("Error, wrong sample size.")
   }
-
-  if(Verteilung != ""){
-    x = distr(n,Verteilung)
+  x = c("D_Henze", "KL", "W", "AD", "CM", "KS", "T1", "T2", "T3", "T4")
+  if(Test != x[x==Test]){
+    return("Error, failure in choosing the test.")
   }
-
-
-
-  d<-"Error"
-  if(method == "D_Henze")         {d <- D_Henze(standardisiert(x,1),5) > tfc::quantile_D_Median[a,6]}
-
-  if(method == "KL")    {d <- D_2(standardisiert(x,2)) >tfc::quantile_KL_ML[a]}
-
-
-  if(method == "W")      {d <- W(standardisiert(x,2)) > tfc::quantile_edf_ML[a,4]}
-  if(method == "AD") {d <- AD(standardisiert(x,1)) > tfc::quantile_edf_Median[a,3]}
-  if(method == "CM") {d <- CM(standardisiert(x,1)) > tfc::quantile_edf_Median[a,2]}
-  if(method == "KS") {d <- KS(standardisiert(x,1)) > tfc::quantile_edf_Median[a,1]}
-
-
-  if(method == "T2")     {d <- T2(standardisiert(x,2),0.025) >tfc::quantile_T2_ML[a,1]}
-  if(method == "T1")     {d <-T1(standardisiert(x,2),5) > tfc::quantile_T1_ML[a,6]}
-  if(method == "T3")         {d <-T3(standardisiert(x,2),10) > tfc::quantile_T3_ML[a,7]}
-  if(method == "T4")         {d <-T4(standardisiert(x,2),10) > tfc::quantile_T4_ML[a,7]}
-  return(list("Decision" = d))
-
+  if (n==10) {a=1}
+  if (n==20) {a=2}
+  if (n==50) {a=3}
+  if( Test == "D_Henze")  {value <- D_Henze(standardisiert(Sample,1),5); d <- value > tfc::quantile_D_Median[a,6]}
+  if( Test == "KL")       {value <- D_2(standardisiert(Sample,2)); d <- value > tfc::quantile_KL_ML[a]}
+  if( Test == "W")        {value <- W(standardisiert(Sample,2)); d <- value > tfc::quantile_edf_ML[a,4]}
+  if( Test == "AD")       {value <- AD(standardisiert(Sample,1)); d <- value > tfc::quantile_edf_Median[a,3]}
+  if( Test == "CM")       {value <- CM(standardisiert(Sample,1)); d <- value > tfc::quantile_edf_Median[a,2]}
+  if( Test == "KS")       {value <- KS(standardisiert(Sample,1)); d <- value > tfc::quantile_edf_Median[a,1]}
+  if( Test == "T2")       {value <- T2(standardisiert(Sample,2),0.025); d <- value > tfc::quantile_T2_ML[a,1]}
+  if( Test == "T1")       {value <- T1(standardisiert(Sample,2),5); d <- value > tfc::quantile_T1_ML[a,6]}
+  if( Test == "T3")       {value <- T3(standardisiert(Sample,2),10); d <- value > tfc::quantile_T3_ML[a,7]}
+  if( Test == "T4")       {value <- T4(standardisiert(Sample,2),10); d <- value > tfc::quantile_T4_ML[a,7]}
+  parameters <- median_est(Sample)
+  result <- list("test" = Test, "decision" = d, "sample" = Sample, "value" = value, "parameters" = parameters)
+  attr(result, "class") <- "tfc"
+  result
 }
+
+#' @export
+print.tfc <- function(obj){
+  cat("################################################################################################################## \n")
+  cat("         One-sample test for cauchy with the ",obj$test, " teststatistic.\n"  )
+  cat("\n")
+  cat("data: ", obj$sample, "\n")
+  cat(obj$test," = ", obj$value, " \n")
+  cat("Estimated location parameter =  ", obj$parameters[1], " \n")
+  cat("Estimated scale parameter =  ", obj$parameters[2], " \n")
+  if (obj$decision == TRUE) {
+    cat("The test has no objection, that the sample is not cauchy distributed under the significane level of 0.095. \n")
+  } else{
+    cat("The test rejects the assumption, that the sample is cauchy distributed. \n")
+  }
+  cat("################################################################################################################## \n")
+}
+
