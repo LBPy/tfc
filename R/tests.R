@@ -23,7 +23,7 @@ D_Henze <- function(y,l) {
 #' Perform the Anderson-Darling test.
 #'
 #' @param y a numeric vector of data values.
-#'
+#' @export
 AD <- function(y) {
   n=length(y)
   z= pcauchy(sort(y))
@@ -63,6 +63,7 @@ KS <- function(y) {
 #' @return A number.
 #'
 #' @family teststatistic
+#' @export
 T1 <- function(y,l=1) {
   a=l
   h1 <- function(x,a) {
@@ -114,6 +115,7 @@ T2 <- function(y,l=1) {
   s/n+n/(a*2)+2*n/pi**2*integrate(f = function(t) atan(t)**2*exp(-a*t),0,10e30,rel.tol = 1e-10)$value
 }
 #' @describeIn T1 T3 - Statistic
+#' @export
 T3 <- function(y,l=1) {
   a<-l
   n=length(y)
@@ -123,6 +125,7 @@ T3 <- function(y,l=1) {
   sum(4/((Y-Y_t)^2+a^2)^3 *( 2*a*  y%*%t(y) *B *((Y-Y_t)^2+a^2)^2 + 2*Y*a*(Y-Y_t)*((Y-Y_t)^2+a^2) / (1+Y**2) + 2*Y_t*a*(Y_t-Y)*((Y_t-Y)^2+a^2) /(1+Y_t**2) +a^3 -3*a*((Y-Y_t)^2)))/n
 }
 #' @describeIn T1 T4 - Statistic
+#' @export
 T4 <- function(y,l=1) {
   a<- l
   n=length(y)
@@ -142,8 +145,8 @@ T5 <- function(y,l=1) {
   Max_Matrix = pmax(Y,Y_t)
   (2/n * sum(y/(1+y**2))**2 - 4 /(pi * n)* sum(y%*%t(y) *B * atan(Max_Matrix/a)) + 2 / (pi**2 * (a**2 - 1)) * sum(y/(1+y^2) * ((a-1) *pi - 2 * a * atan(y) + 2 * atan(y/a))) + n*(a+2)/(pi**2 * 2*(a+1)**2))
 }
-
-D_2 <- function(Y) {
+#' @export
+KL <- function(Y) {
   n=length(Y)
   b = 1/n*sum(log(dcauchy(Y)))
   f <- function(x) {

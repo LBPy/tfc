@@ -242,7 +242,7 @@ testentscheid <- function(n,Verteilung ="",method,x=0){
 }
 
 #' @export
-cauchy.test <- function(Test , Sample){
+cauchy.test.alt <- function(Test , Sample){
   n = length(Sample)
   if (n!=10 & n!= 20 & n!= 50){
      return("Error, wrong sample size.")
@@ -273,17 +273,67 @@ cauchy.test <- function(Test , Sample){
 #' @export
 print.tfc <- function(obj){
   cat("################################################################################################################## \n")
+  cat("\n")
   cat("         One-sample test for cauchy with the ",obj$test, " teststatistic.\n"  )
   cat("\n")
   cat("data: ", obj$sample, "\n")
+  cat("\n")
   cat(obj$test," = ", obj$value, " \n")
-  cat("Estimated location parameter =  ", obj$parameters[1], " \n")
-  cat("Estimated scale parameter =  ", obj$parameters[2], " \n")
-  if (obj$decision == TRUE) {
+  cat("Estimated quantile =  ", obj$estimated_quantile, " \n")
+  cat("\n")
+  cat("Estimated location parameter =  ", obj$parameter_estimated[1], " \n")
+  cat("Estimated scale parameter    =  ", obj$parameter_estimated[2], " \n")
+  cat("\n")
+  if (obj$decision == FALSE) {
     cat("The test has no objection, that the sample is not cauchy distributed under the significane level of 0.095. \n")
   } else{
     cat("The test rejects the assumption, that the sample is cauchy distributed. \n")
   }
+  cat("\n")
   cat("################################################################################################################## \n")
 }
 
+
+#' @export
+cauchy.test.version2 <- function(Test , Sample, parameter = NULL,method_estimation = 2, repetitions = 10000){
+  n = length(Sample)
+  v = c("D_Henze", "KL", "W", "AD", "CM", "KS", "T1", "T2", "T3", "T4")
+  w = c("KL", "W", "AD", "CM", "KS")
+  if(!is.element(Test,v)){
+    return("Error, failure in choosing the test.")
+  }
+  if( is.null(parameter) ){
+    if (!is.element(Test,w)) {
+      return("Error, a parameter is needed for this test.")
+    }
+  }
+  statistic = get(Test)
+  q <- make_quantile(statistic,n,parameter,repetitions,method_estimation)
+  if( is.element(Test,w)){
+    value <- statistic(standardisiert(Sample,method_estimation))
+    d <- value > q
+  } else{
+    value <- statistic(standardisiert(Sample,method_estimation),l = parameter)
+    d <- value > q
+  }
+
+  if(method_estimation == 1) parameters_estimated = tfc::median_est(x)
+  if(method_estimation == 2) parameters_estimated = tfc::ml_est(x)
+  if(method_estimation == 3) parameters_estimated = tfc::eise_est(x)
+
+  result <- list("test" = Test, "decision" = d, "sample" = Sample, "value" = value, "parameter_estimated" = parameters_estimated,"estimated_quantile" = q)
+  attr(result, "class") <- "tfc"
+  result
+}
+
+make_quantile <- function(statistic,n,parameter,repetitions,method_estimation) {
+  if( is.null(parameter)){
+    emp <- apply(replicate(repetitions,rcauchy(n,0,1)),2,standardisiert,method_estimation = method_estimation)
+    q <- unname(quantile(apply(emp,2,statistic),0.95))
+  } else{
+    emp <- apply(replicate(repetitions,rcauchy(n,0,1)),2,standardisiert,method_estimation = method_estimation)
+    #do.call(cbind, parallel::mclapply(parameter, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
+    q <- unname(quantile(apply(emp,2,statistic,l = parameter),0.95))
+  }
+  q
+}
