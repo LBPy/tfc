@@ -20,7 +20,7 @@ D_Henze <- function(y,l) {
 
 #' Anderson-Darling Test
 #'
-#' Perform the Anderson-Darling test.
+#' Performs the Anderson-Darling test.
 #'
 #' @param y a numeric vector of data values.
 #' @export
@@ -29,16 +29,37 @@ AD <- function(y) {
   z= pcauchy(sort(y))
   -n - sum((2*1:n-1)*log(z) + (2*n+1-2*1:n)*log(1-z))/n
 }
+
+#' Cramer-von Mises Test
+#'
+#' Performs the Cramer-von Mises test.
+#'
+#' @param y a numeric vector of data values.
+#' @export
 CM <- function(y) {
   n=length(y)
   z = pcauchy(sort(y))
   sum((z-(2*1:n-1)/(2*n))**2)+1/(12*n)
 }
+
+#' Watson Test
+#'
+#' Performs the Watson test.
+#'
+#' @param y a numeric vector of data values.
+#' @export
 W <- function(y) {
   n=length(y)
   z = pcauchy(sort(y))
   sum((z-(2*1:n-1)/(2*n))**2)+1/(12*n) - n*(sum(z)/n-0.5)**2
 }
+
+#' Kolmogorov-Smirnov Test
+#'
+#' Performs the Kolmogorov-Smirnov test.
+#'
+#' @param y a numeric vector of data values.
+#' @export
 KS <- function(y) {
   n=length(y)
   z = pcauchy(sort(y))
@@ -145,6 +166,13 @@ T5 <- function(y,l=1) {
   Max_Matrix = pmax(Y,Y_t)
   (2/n * sum(y/(1+y**2))**2 - 4 /(pi * n)* sum(y%*%t(y) *B * atan(Max_Matrix/a)) + 2 / (pi**2 * (a**2 - 1)) * sum(y/(1+y^2) * ((a-1) *pi - 2 * a * atan(y) + 2 * atan(y/a))) + n*(a+2)/(pi**2 * 2*(a+1)**2))
 }
+
+
+#' Kullback-Leibler Test
+#'
+#' Performs a test based on the Kullback-Leibler divergence.
+#'
+#' @param Y a numeric vector of data values.
 #' @export
 KL <- function(Y) {
   n=length(Y)

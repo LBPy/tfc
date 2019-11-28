@@ -10,5 +10,5 @@ AD(y)
 \item{y}{a numeric vector of data values.}
 }
 \description{
-Perform the Anderson-Darling test.
+Performs the Anderson-Darling test.
 }

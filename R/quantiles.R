@@ -75,7 +75,7 @@ quantile_KL <- function(reps=10000,standard = 2) {
   pb <- txtProgressBar(title="Example progress bar", label="0% done", min=0, max=100, initial=0,style = 3)
   for (n in c(10,20,50,100)) {
     emp <- apply(replicate(reps,rcauchy(n,0,1)),2,standardisiert,method_estimation = standard)
-    KL_Statistik = apply(emp , 2, D_2)
+    KL_Statistik = apply(emp , 2, KL)
     if (n==10) {a=1}
     if (n==20) {a=2}
     if (n==50) {a=3}

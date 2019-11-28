@@ -14,7 +14,6 @@
 #'
 #' @return A numeric vector.
 #' @export
-
 standardisiert <- function(x,method_estimation = 1) {
   if(method_estimation == 1) param = tfc::median_est(x)
   if(method_estimation == 2) param = tfc::ml_est(x)
@@ -23,7 +22,7 @@ standardisiert <- function(x,method_estimation = 1) {
 }
 
 
-#' Function for standardizing data
+#' Function for making a random vector.
 #'
 #' distr returns a random vector simulated by a choosen distribution.
 #'
@@ -155,7 +154,6 @@ distr <- function(n,case) {
 #' @param x A numeric vector of length n.
 #'
 #' @return binary number.
-#' @export
 testentscheid <- function(n,Verteilung ="",method,x=0){
   if (n==10) {a=1}
   if (n==20) {a=2}
@@ -169,8 +167,8 @@ testentscheid <- function(n,Verteilung ="",method,x=0){
   if(method == "D")         {d <- D_Henze(standardisiert(x,1),5) > tfc::quantile_D_Median[a,6]}
   if(method == "D_ML")      {d<- D_Henze(standardisiert(x,2),5) > tfc::quantile_D_ML[a,6]}
   #if(method = D_EISE){}
-  if(method == "D_2_Median"){d<-D_2(standardisiert(x,1)) > tfc::quantile_KL_Median[a]}
-  if(method == "D_2_ML")    {d <- D_2(standardisiert(x,2)) >tfc::quantile_KL_ML[a]}
+  if(method == "D_2_Median"){d<- KL(standardisiert(x,1)) > tfc::quantile_KL_Median[a]}
+  if(method == "D_2_ML")    {d <- KL(standardisiert(x,2)) >tfc::quantile_KL_ML[a]}
   if(method == "T1_ML")     {d <-T1(standardisiert(x,2),1) > tfc::quantile_T1_ML[a,4]}
   if(method == "T2_ML")     {d <- T2(standardisiert(x,2),1) >tfc::quantile_T2_ML[a,4]}
   if(method == "T1_Median") {d <- T1(standardisiert(x,1),1) > tfc::quantile_T1_Median[a,4]}
@@ -241,7 +239,6 @@ testentscheid <- function(n,Verteilung ="",method,x=0){
 
 }
 
-#' @export
 cauchy.test.alt <- function(Test , Sample){
   n = length(Sample)
   if (n!=10 & n!= 20 & n!= 50){
@@ -255,7 +252,7 @@ cauchy.test.alt <- function(Test , Sample){
   if (n==20) {a=2}
   if (n==50) {a=3}
   if( Test == "D_Henze")  {value <- D_Henze(standardisiert(Sample,1),5); d <- value > tfc::quantile_D_Median[a,6]}
-  if( Test == "KL")       {value <- D_2(standardisiert(Sample,2)); d <- value > tfc::quantile_KL_ML[a]}
+  if( Test == "KL")       {value <- D_Henze(standardisiert(Sample,2)); d <- value > tfc::quantile_KL_ML[a]}
   if( Test == "W")        {value <- W(standardisiert(Sample,2)); d <- value > tfc::quantile_edf_ML[a,4]}
   if( Test == "AD")       {value <- AD(standardisiert(Sample,1)); d <- value > tfc::quantile_edf_Median[a,3]}
   if( Test == "CM")       {value <- CM(standardisiert(Sample,1)); d <- value > tfc::quantile_edf_Median[a,2]}
@@ -271,21 +268,20 @@ cauchy.test.alt <- function(Test , Sample){
 }
 
 #' @export
-print.tfc <- function(obj){
+print.tfc <- function(x, ...){
   cat("################################################################################################################## \n")
   cat("\n")
-  cat("         One-sample test for cauchy with the ",obj$test, " teststatistic.\n"  )
+  cat("         One-sample test for cauchy with the ", x$test, " teststatistic.\n"  )
   cat("\n")
-  cat("data: ", obj$sample, "\n")
+  if(x$data_print == TRUE) cat("data: ", x$sample, "\n\n")
+  cat(x$test," = ", x$value, " \n")
+  cat("Estimated ",x$significance_level," quantile =  ", x$estimated_quantile, " \n")
   cat("\n")
-  cat(obj$test," = ", obj$value, " \n")
-  cat("Estimated quantile =  ", obj$estimated_quantile, " \n")
+  cat("Estimated location parameter =  ", x$parameter_estimated[1], " \n")
+  cat("Estimated scale parameter    =  ", x$parameter_estimated[2], " \n")
   cat("\n")
-  cat("Estimated location parameter =  ", obj$parameter_estimated[1], " \n")
-  cat("Estimated scale parameter    =  ", obj$parameter_estimated[2], " \n")
-  cat("\n")
-  if (obj$decision == FALSE) {
-    cat("The test has no objection, that the sample is not cauchy distributed under the significane level of 0.095. \n")
+  if (x$decision == FALSE) {
+    cat("The test has no objection, that the sample is not cauchy distributed under the significance level of", x$significance_level, ". \n")
   } else{
     cat("The test rejects the assumption, that the sample is cauchy distributed. \n")
   }
@@ -293,47 +289,58 @@ print.tfc <- function(obj){
   cat("################################################################################################################## \n")
 }
 
-
+#' Function for testing if a sample is cauchy distributed.
+#'
+#' \code{cauchy.test} returns if a sample is cauchy distributed with a given significance level.
+#'
+#'
+#'
+#' @param Test A string with the name of the test.
+#' @param Sample A numeric vector with data.
+#' @param parameter A positive numeric value if the test requires a parameter (see below).
+#' @param method_estimation A parameter specifying the method for estimating the Cauchy-distribution parameters.
+#' @param alpha A numeric value between 0 and 1 specifying the significance level.
+#' @param repetitions A positiv integer
+#'
+#' Possible tests are D_Henze, KL, W, AD, CM, KS, T1, T2, T3, T4. The tests D_Henze, T1, T2, T3, T4 require a positive parameter, which influences the weight-function.
 #' @export
-cauchy.test.version2 <- function(Test , Sample, parameter = NULL,method_estimation = 2, repetitions = 10000){
+cauchy.test <- function(Test , Sample, parameter = NULL,method_estimation = 2, alpha = 0.05, repetitions = 10000, data_print = TRUE){
   n = length(Sample)
-  v = c("D_Henze", "KL", "W", "AD", "CM", "KS", "T1", "T2", "T3", "T4")
-  w = c("KL", "W", "AD", "CM", "KS")
-  if(!is.element(Test,v)){
+  if(!is.element(Test, c("D_Henze", "KL", "W", "AD", "CM", "KS", "T1", "T2", "T3", "T4"))){
     return("Error, failure in choosing the test.")
   }
   if( is.null(parameter) ){
-    if (!is.element(Test,w)) {
+    if (!is.element(Test, c("KL", "W", "AD", "CM", "KS"))) {
       return("Error, a parameter is needed for this test.")
     }
   }
   statistic = get(Test)
-  q <- make_quantile(statistic,n,parameter,repetitions,method_estimation)
-  if( is.element(Test,w)){
-    value <- statistic(standardisiert(Sample,method_estimation))
+  q <- make_quantile(Test, statistic,n,parameter,repetitions,method_estimation, alpha)
+  if( is.element(Test, c("KL", "W", "AD", "CM", "KS"))){
+    value <- statistic(tfc::standardisiert(Sample,method_estimation))
     d <- value > q
   } else{
-    value <- statistic(standardisiert(Sample,method_estimation),l = parameter)
+    value <- statistic(tfc::standardisiert(Sample,method_estimation),l = parameter)
     d <- value > q
   }
 
-  if(method_estimation == 1) parameters_estimated = tfc::median_est(x)
-  if(method_estimation == 2) parameters_estimated = tfc::ml_est(x)
-  if(method_estimation == 3) parameters_estimated = tfc::eise_est(x)
+  if(method_estimation == 1) parameters_estimated = tfc::median_est(Sample)
+  if(method_estimation == 2) parameters_estimated = tfc::ml_est(Sample)
+  if(method_estimation == 3) parameters_estimated = tfc::eise_est(Sample)
 
-  result <- list("test" = Test, "decision" = d, "sample" = Sample, "value" = value, "parameter_estimated" = parameters_estimated,"estimated_quantile" = q)
+  result <- list("test" = paste(Test,parameter), "decision" = d, "sample" = Sample, "value" = value, "parameter_estimated" = parameters_estimated,"significance_level" = 1-alpha, "estimated_quantile" = q, "data_print" = data_print)
   attr(result, "class") <- "tfc"
   result
 }
 
-make_quantile <- function(statistic,n,parameter,repetitions,method_estimation) {
-  if( is.null(parameter)){
+make_quantile <- function(Test, statistic,n,parameter,repetitions,method_estimation, alpha) {
+  if( is.element(Test, c("KL", "W", "AD", "CM", "KS"))){
     emp <- apply(replicate(repetitions,rcauchy(n,0,1)),2,standardisiert,method_estimation = method_estimation)
-    q <- unname(quantile(apply(emp,2,statistic),0.95))
+    q <- unname(quantile(apply(emp,2,statistic),1-alpha))
   } else{
     emp <- apply(replicate(repetitions,rcauchy(n,0,1)),2,standardisiert,method_estimation = method_estimation)
     #do.call(cbind, parallel::mclapply(parameter, function(x) unname(quantile(apply(emp,2,statistic,l=x),0.95)),mc.cores=cores))
-    q <- unname(quantile(apply(emp,2,statistic,l = parameter),0.95))
+    q <- unname(quantile(apply(emp,2,statistic,l = parameter),1-alpha))
   }
   q
 }
