@@ -2,7 +2,7 @@
 % Please edit documentation in R/automatisation.R
 \name{distr}
 \alias{distr}
-\title{Function for standardizing data}
+\title{Function for making a random vector.}
 \usage{
 distr(n, case)
 }
